@@ -1,0 +1,6 @@
+{
+  "name": "SmartGuard AI – Smart Car Security & Driver Safety",
+  "description": "Futuristic smart car security, anti-theft sentry protection, driver drowsiness monitoring, live telemetry tracking, and bilingual voice control.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
