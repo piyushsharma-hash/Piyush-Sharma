@@ -900,6 +900,7 @@ export default function App() {
         onTriggerFindMyCar={handleFindMyCar}
         soundEnabled={settings.soundEnabled}
         voiceFeedbackEnabled={settings.voiceFeedbackEnabled}
+        activities={activities}
       />
 
       {/* Footer */}

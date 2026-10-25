@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Mic, 
-  MicOff, 
   Send, 
-  Volume2, 
-  VolumeX, 
   Sparkles, 
   CheckCircle2, 
   AlertCircle, 
   X,
   Languages,
-  RotateCcw
+  HelpCircle,
+  Activity,
+  Check,
+  ShieldCheck,
+  Lightbulb,
+  Lock,
+  Unlock,
+  Wind,
+  Layers
 } from 'lucide-react';
 import { VehicleState, LocationState, ActivityLog } from '../types';
 import { parseVoiceCommand, speakText, CommandExecutionResult } from '../utils/voiceAssistant';
@@ -25,6 +30,7 @@ interface VoiceAssistantModalProps {
   onTriggerFindMyCar: () => void;
   soundEnabled: boolean;
   voiceFeedbackEnabled: boolean;
+  activities?: ActivityLog[];
 }
 
 export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
@@ -35,7 +41,8 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
   onApplyChanges,
   onTriggerFindMyCar,
   soundEnabled,
-  voiceFeedbackEnabled
+  voiceFeedbackEnabled,
+  activities = []
 }) => {
   const [inputText, setInputText] = useState<string>('');
   const [isListening, setIsListening] = useState<boolean>(false);
@@ -43,6 +50,7 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
   const [lastResult, setLastResult] = useState<CommandExecutionResult | null>(null);
   const [speechSupported, setSpeechSupported] = useState<boolean>(false);
   const [currentLang, setCurrentLang] = useState<'en-US' | 'hi-IN'>('en-US');
+  const [showLogTab, setShowLogTab] = useState<boolean>(false);
   
   const recognitionRef = useRef<any>(null);
 
@@ -98,7 +106,7 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
           recognitionRef.current.start();
         }
       } catch {
-        // Recognition already started or error
+        // Recognition already started or busy
       }
     }
   };
@@ -116,7 +124,7 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
           action: `Voice: ${result.actionTaken}`,
           category: result.category,
           source: 'voice',
-          details: `Recognized: "${commandStr}"`
+          details: `Recognized [${result.intent}]: "${commandStr}"`
         });
       }
 
@@ -124,7 +132,7 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
         onTriggerFindMyCar();
       }
 
-      // Audio lock/unlock/arm sounds
+      // Audio feedback
       if (result.appliedChanges?.doorsLocked === true) soundFx.playLock(soundEnabled);
       if (result.appliedChanges?.doorsLocked === false) soundFx.playUnlock(soundEnabled);
       if (result.appliedChanges?.masterSecurityArmed === true) soundFx.playArmSecurity(soundEnabled);
@@ -136,6 +144,7 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
         speakText(reply, currentLang);
       }
     } else {
+      // Clarification or unrecognized
       if (voiceFeedbackEnabled) {
         const reply = currentLang === 'hi-IN' ? result.responseTextHi : result.responseTextEn;
         speakText(reply, currentLang);
@@ -168,24 +177,11 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
     'driver safety on karo'
   ];
 
-  const sampleCommandsEn = [
-    'Turn on headlights',
-    'Lock my car',
-    'Open windows',
-    'Open trunk',
-    'Activate security',
-    'Where is my car?',
-    'Turn off headlights',
-    'Unlock my car',
-    'Close windows',
-    'Close trunk',
-    'Disarm security',
-    'Enable driver safety'
-  ];
+  const voiceActivities = activities.filter(a => a.source === 'voice');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-      <div className="relative w-full max-w-xl cyber-panel rounded-3xl p-6 border border-cyan-500/40 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-xl cyber-panel rounded-3xl p-5 md:p-6 border border-cyan-500/40 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-cyan-500/15 pb-3">
           <div className="flex items-center gap-3">
@@ -193,11 +189,14 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white tracking-wide">
+              <h3 className="text-base font-bold text-white tracking-wide flex items-center gap-2">
                 SmartGuard Voice AI Copilot
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                  NLU INTENT ENGINE
+                </span>
               </h3>
               <p className="text-xs text-slate-400">
-                Supports Hindi, Hinglish &amp; English with Typed Input Fallback
+                Natural speech in Hindi, Hinglish &amp; English with typed input fallback
               </p>
             </div>
           </div>
@@ -206,7 +205,8 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
             {/* Language Selector */}
             <button
               onClick={() => setCurrentLang(prev => prev === 'en-US' ? 'hi-IN' : 'en-US')}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-xs text-slate-300 hover:text-cyan-300 transition-colors font-mono"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-slate-300 hover:text-cyan-300 transition-colors font-mono"
+              title="Toggle Speech Recognition Language"
             >
               <Languages className="w-3.5 h-3.5 text-cyan-400" />
               <span>{currentLang === 'hi-IN' ? 'हिंदी (Mic Active)' : 'English (Mic Active)'}</span>
@@ -229,13 +229,14 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
             )}
             <button
               onClick={toggleListening}
-              className={`relative z-10 w-18 h-18 rounded-full flex items-center justify-center border-2 transition-all ${
+              className={`relative z-10 w-20 h-20 rounded-full flex items-center justify-center border-2 transition-all ${
                 isListening
                   ? 'bg-red-500 border-red-300 text-white shadow-lg shadow-red-500/50 scale-105'
                   : 'bg-gradient-to-br from-cyan-500 to-blue-600 border-cyan-300 text-black hover:scale-105 neon-glow-cyan'
               }`}
+              title={isListening ? 'Click to stop listening' : 'Click to talk (Hindi / Hinglish / English)'}
             >
-              {isListening ? <Mic className="w-7 h-7 animate-pulse" /> : <Mic className="w-7 h-7" />}
+              <Mic className={`w-8 h-8 ${isListening ? 'animate-pulse' : ''}`} />
             </button>
           </div>
 
@@ -244,13 +245,13 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
               {isListening ? 'Listening... Speak in Hindi, Hinglish, or English' : 'Tap microphone or type command below'}
             </span>
             <p className="text-[11px] text-slate-400 mt-0.5">
-              {speechSupported ? 'Browser Web Speech API Connected (Continuous Audio Sync)' : 'Speech recognition unavailable on this browser; typed command fallback active below'}
+              {speechSupported ? 'Browser Web Speech API Connected (Continuous Audio Sync)' : 'Web Speech API unavailable on this browser; typed input fallback active below'}
             </p>
           </div>
 
           {/* Transcript preview if present */}
           {transcript && (
-            <div className="mt-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 text-cyan-300 font-mono text-xs max-w-md">
+            <div className="mt-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 text-cyan-300 font-mono text-xs max-w-md">
               Recognized Audio: <strong className="text-white">“{transcript}”</strong>
             </div>
           )}
@@ -258,34 +259,74 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
 
         {/* Command Execution Result Box */}
         {lastResult && (
-          <div className={`p-3.5 rounded-xl border flex flex-col gap-1.5 text-xs ${
+          <div className={`p-4 rounded-xl border flex flex-col gap-2 text-xs transition-all ${
             lastResult.understood 
               ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' 
-              : 'bg-amber-950/40 border-amber-500/40 text-amber-200'
+              : lastResult.needsClarification
+                ? 'bg-amber-950/40 border-amber-500/50 text-amber-200'
+                : 'bg-red-950/40 border-red-500/40 text-red-200'
           }`}>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 {lastResult.understood ? (
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                 ) : (
-                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                  <HelpCircle className="w-4 h-4 text-amber-400 shrink-0" />
                 )}
-                <span className="font-bold text-white">
+                <span className="font-bold text-white text-sm">
                   {lastResult.actionTaken}
                 </span>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-black/40 text-slate-300">
-                {lastResult.understood ? 'STATE UPDATED' : 'NOT RECOGNIZED'}
+              
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-black/50 text-cyan-300 border border-cyan-500/30">
+                  INTENT: {lastResult.intent} ({(lastResult.confidence * 100).toFixed(0)}%)
+                </span>
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${
+                  lastResult.understood 
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' 
+                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                }`}>
+                  {lastResult.understood ? 'STATE SYNCHRONIZED' : 'CLARIFICATION NEEDED'}
+                </span>
+              </div>
+            </div>
+
+            <div className="text-[11px] text-slate-300 pl-6 flex items-center gap-2">
+              <span>Command:</span>
+              <span className="font-mono text-cyan-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                “{lastResult.rawCommand}”
               </span>
             </div>
 
-            <div className="text-[11px] text-slate-300 pl-6">
-              Command: <span className="font-mono text-cyan-300">“{lastResult.rawCommand}”</span>
-            </div>
-
-            <p className="text-xs text-slate-200 pl-6">
+            <p className="text-xs text-slate-200 pl-6 leading-relaxed">
               {currentLang === 'hi-IN' ? lastResult.responseTextHi : lastResult.responseTextEn}
             </p>
+
+            {/* Clarification suggestions pills if ambiguous or unrecognized */}
+            {lastResult.clarificationSuggestions && lastResult.clarificationSuggestions.length > 0 && (
+              <div className="mt-2 pl-6 pt-2 border-t border-amber-500/20">
+                <span className="text-[10px] uppercase font-mono text-amber-300 block mb-1.5">
+                  Did you mean one of these? Click to execute:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {lastResult.clarificationSuggestions.map((sug, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        setTranscript(sug);
+                        handleProcessCommand(sug);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900 border border-amber-500/40 text-amber-200 hover:text-white text-[11px] font-mono transition-all flex items-center gap-1"
+                    >
+                      <Check className="w-3 h-3 text-amber-400" />
+                      {sug}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -295,49 +336,97 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Type in Hinglish/English (e.g. light on karo, car lock karo, window kholo, dicky kholo)..."
+            placeholder="Type in Hindi, Hinglish, or English (e.g. light on karo, car lock karo, window kholo, dicky kholo)..."
             className="flex-1 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 focus:border-cyan-400 text-xs text-white placeholder-slate-500 outline-none transition-colors"
           />
           <button
             type="submit"
-            className="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-bold transition-all flex items-center gap-1.5"
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black text-xs font-bold transition-all flex items-center gap-1.5 shrink-0"
           >
             <Send className="w-3.5 h-3.5" />
             Execute
           </button>
         </form>
 
-        {/* Quick Suggestion Chips for Hindi/Hinglish and English */}
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] uppercase font-mono text-slate-400">
-              Quick test commands (Click to test directly):
-            </span>
-            <span className="text-[10px] text-cyan-400 font-mono">
-              Hinglish &amp; English
-            </span>
+        {/* Toggle between Suggestions & Recent Voice Activity Log */}
+        <div className="flex items-center justify-between border-t border-slate-800/80 pt-2 text-xs">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowLogTab(false)}
+              className={`px-2.5 py-1 rounded-lg font-mono text-[11px] transition-all ${
+                !showLogTab 
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold' 
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Suggested Commands
+            </button>
+            <button
+              onClick={() => setShowLogTab(true)}
+              className={`px-2.5 py-1 rounded-lg font-mono text-[11px] transition-all flex items-center gap-1.5 ${
+                showLogTab 
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold' 
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Activity className="w-3 h-3 text-cyan-400" />
+              Voice Event Log ({voiceActivities.length})
+            </button>
           </div>
 
-          <div className="flex flex-wrap gap-1.5 max-h-[140px] overflow-y-auto pr-1">
-            {sampleCommandsHinglish.map((cmd, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => {
-                  setTranscript(cmd);
-                  handleProcessCommand(cmd);
-                }}
-                className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 hover:border-cyan-400 text-[11px] text-cyan-200 hover:text-white transition-all font-mono"
-              >
-                {cmd}
-              </button>
-            ))}
-          </div>
+          <span className="text-[10px] text-slate-500 font-mono hidden sm:inline">
+            Shared App State Synchronized
+          </span>
         </div>
+
+        {/* Tab 1: Suggestions Chips */}
+        {!showLogTab ? (
+          <div>
+            <div className="flex flex-wrap gap-1.5 max-h-[120px] overflow-y-auto pr-1">
+              {sampleCommandsHinglish.map((cmd, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    setTranscript(cmd);
+                    handleProcessCommand(cmd);
+                  }}
+                  className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 hover:border-cyan-400 text-[11px] text-cyan-200 hover:text-white transition-all font-mono"
+                >
+                  {cmd}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* Tab 2: Timestamped Voice Activities Log */
+          <div className="flex flex-col gap-1.5 max-h-[130px] overflow-y-auto pr-1">
+            {voiceActivities.length === 0 ? (
+              <div className="text-center py-4 text-xs text-slate-500">
+                No voice actions recorded yet in this session.
+              </div>
+            ) : (
+              voiceActivities.slice(0, 6).map(act => (
+                <div
+                  key={act.id}
+                  className="p-2 rounded-lg bg-slate-900/80 border border-slate-800 text-[11px] flex items-center justify-between"
+                >
+                  <div>
+                    <span className="font-semibold text-slate-200">{act.action}</span>
+                    {act.details && (
+                      <span className="text-slate-400 ml-2 font-mono text-[10px]">{act.details}</span>
+                    )}
+                  </div>
+                  <span className="text-[10px] font-mono text-cyan-400 shrink-0">{act.timestamp}</span>
+                </div>
+              ))
+            )}
+          </div>
+        )}
 
         {/* Prototype Disclaimer */}
         <div className="pt-2 border-t border-slate-800/80 text-[10px] text-slate-500 text-center">
-          Prototype Simulation Mode: Voice commands update internal telemetry and visual vehicle models. No real vehicle hardware is connected.
+          Prototype Simulation Mode: Voice actions trigger internal state updates across the visual car schematic, dashboard gauges, and sentry logs. No real vehicle hardware is controlled.
         </div>
       </div>
     </div>
