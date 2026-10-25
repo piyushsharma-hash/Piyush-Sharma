@@ -9,12 +9,987 @@
     <meta property="og:description" content="Futuristic smart car security, anti-theft sentry protection, driver drowsiness monitoring, live telemetry tracking, and bilingual voice control." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom styling -->
+    <link rel="stylesheet" href="/style.css">
+    
+    <!-- Tailwind browser runtime & Lucide icons -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
-  <body class="bg-[#06080F] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body class="bg-[#05070D] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen pb-16">
+
+    <!-- Top Futuristic Cyber HUD Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-cyan-500/20 bg-[#070B16]/90 backdrop-blur-xl">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <!-- Logo & Branding -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-400/40 flex items-center justify-center neon-glow-cyan text-cyan-400">
+            <i data-lucide="shield" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-base font-extrabold tracking-wider text-white font-mono">SMARTGUARD<span class="text-cyan-400">.AI</span></span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30">EV-9</span>
+            </div>
+            <div class="text-[11px] text-slate-400 flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>5G CAN-BUS LINKED</span>
+              <span>·</span>
+              <span class="font-mono text-cyan-400">SG-2026-AI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Telemetry Indicators & Quick Actions -->
+        <div class="flex items-center gap-2 sm:gap-4">
+          <!-- Battery Pill -->
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs font-mono">
+            <i data-lucide="battery-charging" class="w-4 h-4 text-emerald-400"></i>
+            <span class="text-white font-bold">86%</span>
+            <span class="text-slate-500">432 km</span>
+          </div>
+
+          <!-- Voice Assistant Button -->
+          <button id="btn-open-voice-header" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-500/15 border border-cyan-400/50 hover:bg-cyan-500/25 text-cyan-300 text-xs font-mono font-bold transition-all neon-glow-cyan">
+            <i data-lucide="mic" class="w-4 h-4 text-cyan-400 animate-pulse"></i>
+            <span class="hidden md:inline">VOICE ASSISTANT</span>
+          </button>
+
+          <!-- Notifications Bell -->
+          <button class="tab-btn relative p-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 text-slate-300 transition-all" data-tab="notifications" title="Notifications">
+            <i data-lucide="bell" class="w-5 h-5"></i>
+            <span class="unread-badge hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-[9px] font-mono font-bold flex items-center justify-center text-white ring-2 ring-[#05070D]"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs Bar -->
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/60 overflow-x-auto">
+        <div class="flex items-center gap-1 sm:gap-2 py-2 text-xs font-mono whitespace-nowrap">
+          <button class="tab-btn px-3.5 py-1.5 rounded-lg border border-cyan-500/50 bg-cyan-500/20 text-cyan-300 flex items-center gap-2 font-bold transition-all" data-tab="dashboard">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            <span>DASHBOARD</span>
+          </button>
+          <button class="tab-btn px-3.5 py-1.5 rounded-lg border border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all" data-tab="controls">
+            <i data-lucide="sliders" class="w-4 h-4"></i>
+            <span>CONTROLS</span>
+          </button>
+          <button class="tab-btn px-3.5 py-1.5 rounded-lg border border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all" data-tab="tracking">
+            <i data-lucide="map-pin" class="w-4 h-4"></i>
+            <span>CAR TRACKING</span>
+          </button>
+          <button class="tab-btn px-3.5 py-1.5 rounded-lg border border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all" data-tab="security">
+            <i data-lucide="camera" class="w-4 h-4"></i>
+            <span>AI SECURITY</span>
+          </button>
+          <button class="tab-btn px-3.5 py-1.5 rounded-lg border border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all" data-tab="driver">
+            <i data-lucide="eye" class="w-4 h-4"></i>
+            <span>DRIVER SAFETY (DMS)</span>
+          </button>
+          <button class="tab-btn px-3.5 py-1.5 rounded-lg border border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all relative" data-tab="notifications">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            <span>NOTIFICATIONS</span>
+            <span class="unread-badge hidden ml-1 px-1.5 py-0.2 rounded-full bg-red-500 text-[10px] text-white"></span>
+          </button>
+          <button class="tab-btn px-3.5 py-1.5 rounded-lg border border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all" data-tab="settings">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+            <span>SETTINGS</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+
+      <!-- ================= 1. DASHBOARD VIEW ================= -->
+      <section id="view-dashboard" class="tab-content flex flex-col gap-6">
+        
+        <!-- Hero Vehicle Visualizer & Interactive Hotspot Canvas -->
+        <div id="car-visual-container" class="relative w-full rounded-2xl overflow-hidden border border-cyan-500/25 bg-[#060913] shadow-2xl">
+          <!-- Cyber Grid Pattern Background -->
+          <div class="absolute inset-0 cyber-grid-bg opacity-40 pointer-events-none"></div>
+
+          <!-- HUD Top Info Bar -->
+          <div class="relative z-10 p-5 pb-2 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xl font-extrabold text-white tracking-wider font-mono">SmartGuard EV-9 CyberSedan</span>
+                <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">SG-2026-AI</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-slate-400 mt-1">
+                <span class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  5G Ultra · CONNECTED
+                </span>
+                <span class="hidden sm:inline">·</span>
+                <span class="hidden sm:inline font-mono">Gear: [P] · 0 km/h · DLF Cyber City</span>
+              </div>
+            </div>
+
+            <!-- Top Status Badges -->
+            <div class="flex items-center gap-2">
+              <div class="px-3 py-1.5 rounded-xl border flex items-center gap-2 text-xs font-mono font-bold bg-cyan-500/10 border-cyan-500/40 text-cyan-300">
+                <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
+                <span>PERIMETER SENTRY ON</span>
+              </div>
+              <div class="px-3 py-1.5 rounded-xl border flex items-center gap-2 text-xs font-mono font-bold bg-emerald-500/10 border-emerald-500/40 text-emerald-300">
+                <i data-lucide="eye" class="w-4 h-4 text-emerald-400"></i>
+                <span>DRIVER AI ACTIVE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Car Centerpiece with Overlays -->
+          <div class="relative w-full aspect-21/9 md:aspect-24/10 min-h-[300px] max-h-[460px] flex items-center justify-center overflow-hidden select-none">
+            <!-- Base Isometric Car Image -->
+            <img
+              src="/src/assets/images/car_wireframe_cyber_1792818525279.jpg"
+              alt="Futuristic Smart Car Isometric Schematic"
+              class="w-full h-full object-cover object-center brightness-105"
+            />
+
+            <!-- 1. HEADLIGHTS DYNAMIC VISUAL GLOW & LASER BEAMS OVERLAY -->
+            <div id="overlay-headlights" class="absolute inset-0 pointer-events-none z-15" style="display: none;">
+              <!-- Beam 1: Front Left -->
+              <div class="absolute top-[52%] left-[24%] w-[380px] h-[180px] transform -translate-x-[60%] -translate-y-[10%] rotate-[-28deg] opacity-75 mix-blend-screen"
+                   style="background: conic-gradient(from 190deg at 90% 40%, rgba(0, 229, 255, 0.45) 0deg, rgba(56, 189, 248, 0.25) 25deg, transparent 55deg); filter: blur(10px);">
+              </div>
+              <!-- Beam 2: Front Right -->
+              <div class="absolute top-[60%] left-[34%] w-[420px] h-[200px] transform -translate-x-[65%] -translate-y-[10%] rotate-[-26deg] opacity-80 mix-blend-screen"
+                   style="background: conic-gradient(from 190deg at 90% 40%, rgba(0, 229, 255, 0.55) 0deg, rgba(14, 165, 233, 0.3) 30deg, transparent 60deg); filter: blur(12px);">
+              </div>
+              <!-- Twin Headlight Pod Flares -->
+              <div class="absolute top-[62%] left-[36%] w-10 h-10 -translate-x-1/2 -translate-y-1/2 rounded-full animate-pulse"
+                   style="background: radial-gradient(circle, #ffffff 15%, #00e5ff 60%, transparent 90%); box-shadow: 0 0 25px #00e5ff, 0 0 50px #00b0ff, 0 0 90px #00e5ff;">
+              </div>
+              <div class="absolute top-[50%] left-[26%] w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full animate-pulse"
+                   style="background: radial-gradient(circle, #ffffff 15%, #00e5ff 60%, transparent 90%); box-shadow: 0 0 20px #00e5ff, 0 0 40px #00b0ff;">
+              </div>
+              <!-- Ground cyan pool -->
+              <div class="absolute bottom-[10%] left-[8%] w-[260px] h-[90px] rounded-full opacity-60 mix-blend-screen"
+                   style="background: radial-gradient(ellipse at center, rgba(0,229,255,0.4) 0%, rgba(6,182,212,0.15) 50%, transparent 80%); filter: blur(16px);">
+              </div>
+            </div>
+
+            <!-- 2. DOORS LOCK OVERLAY -->
+            <div id="overlay-doors" class="absolute inset-0 pointer-events-none z-15">
+              <!-- Dynamically populated by JS: emerald secure barrier or amber pulse -->
+            </div>
+
+            <!-- 3. WINDOWS AIRFLOW OVERLAY -->
+            <div id="overlay-windows" class="absolute inset-0 pointer-events-none z-16" style="display: none;">
+              <div class="absolute top-[33%] left-[45%] w-[130px] h-[45px] -translate-x-1/2 -translate-y-1/2 border border-cyan-400/60 rounded-xl"
+                   style="background: linear-gradient(90deg, rgba(0,229,255,0.2) 0%, rgba(56,189,248,0.05) 100%); box-shadow: 0 0 15px rgba(0,229,255,0.4);">
+                <div class="absolute inset-0 flex items-center justify-around opacity-75">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-300 animate-ping"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-300 animate-ping"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-300 animate-ping"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. TRUNK HATCH OPEN OVERLAY -->
+            <div id="overlay-trunk" class="absolute inset-0 pointer-events-none z-16" style="display: none;">
+              <div class="absolute top-[27%] left-[73%] w-[110px] h-[80px] -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-amber-400/90 animate-pulse"
+                   style="background: radial-gradient(circle at center, rgba(245, 158, 11, 0.4) 0%, rgba(245, 158, 11, 0.1) 70%, transparent 100%); box-shadow: 0 0 30px rgba(245, 158, 11, 0.6), inset 0 0 15px rgba(245, 158, 11, 0.4);">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-amber-500 text-black text-[9px] font-mono font-bold whitespace-nowrap">
+                  HATCH OPEN ▲
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. 360° SENTRY HOLOGRAPHIC RING -->
+            <div id="overlay-sentry" class="absolute inset-0 pointer-events-none z-14 flex items-center justify-center">
+              <div class="w-[82%] h-[80%] rounded-full border border-cyan-400/35 border-dashed animate-spin"
+                   style="animation-duration: 30s; box-shadow: 0 0 40px rgba(6, 182, 212, 0.15);">
+              </div>
+              <div class="absolute w-[86%] h-[84%] rounded-full border border-cyan-500/15"></div>
+            </div>
+
+            <!-- 6. HAZARD FLASHERS / FIND MY CAR BEACONS -->
+            <div id="overlay-hazards" class="absolute inset-0 pointer-events-none z-18" style="display: none;">
+              <div class="absolute top-[52%] left-[24%] w-6 h-6 rounded-full bg-amber-400 animate-ping opacity-90 shadow-lg shadow-amber-500"></div>
+              <div class="absolute top-[65%] left-[38%] w-6 h-6 rounded-full bg-amber-400 animate-ping opacity-90 shadow-lg shadow-amber-500"></div>
+              <div class="absolute top-[28%] left-[72%] w-6 h-6 rounded-full bg-amber-400 animate-ping opacity-90 shadow-lg shadow-amber-500"></div>
+              <div class="absolute top-[40%] left-[84%] w-6 h-6 rounded-full bg-amber-400 animate-ping opacity-90 shadow-lg shadow-amber-500"></div>
+            </div>
+
+            <!-- Interactive Floating Hotspots Directly Over Vehicle Components -->
+            <!-- Hotspot: Headlights -->
+            <div class="absolute top-[54%] left-[22%] transform -translate-x-1/2 -translate-y-1/2 z-20">
+              <button id="hotspot-btn-headlights" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl backdrop-blur-md text-[11px] font-mono border transition-all bg-slate-950/85 border-slate-700 text-slate-300">
+                <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span>Headlights: <strong class="text-slate-400">OFF</strong></span>
+              </button>
+            </div>
+
+            <!-- Hotspot: Doors -->
+            <div class="absolute top-[44%] left-[52%] transform -translate-x-1/2 -translate-y-1/2 z-20">
+              <button id="hotspot-btn-doors" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl backdrop-blur-md text-[11px] font-mono border transition-all bg-emerald-500/25 border-emerald-400 text-emerald-200 font-bold">
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Doors: <strong class="text-emerald-300">LOCKED</strong></span>
+              </button>
+            </div>
+
+            <!-- Hotspot: Windows -->
+            <div class="absolute top-[32%] left-[43%] transform -translate-x-1/2 -translate-y-1/2 z-20 hidden sm:block">
+              <button id="hotspot-btn-windows" class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl backdrop-blur-md text-[11px] font-mono border transition-all bg-slate-950/85 border-slate-700 text-slate-300">
+                <i data-lucide="wind" class="w-3.5 h-3.5 text-cyan-400"></i>
+                <span>Windows: <strong class="text-slate-400">CLOSED</strong></span>
+              </button>
+            </div>
+
+            <!-- Hotspot: Trunk -->
+            <div class="absolute top-[26%] left-[74%] transform -translate-x-1/2 -translate-y-1/2 z-20">
+              <button id="hotspot-btn-trunk" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl backdrop-blur-md text-[11px] font-mono border transition-all bg-slate-950/85 border-slate-700 text-slate-300">
+                <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>Trunk/Dicky: <strong class="text-slate-400">CLOSED</strong></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Action Bar under car -->
+          <div class="p-4 bg-slate-950/80 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+            <div class="flex flex-wrap items-center gap-2">
+              <button id="btn-quick-security" class="px-3 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 hover:bg-cyan-500/30 font-bold flex items-center gap-1.5">
+                <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                <span>MASTER SECURITY</span>
+              </button>
+              <button id="btn-quick-dms" class="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 hover:bg-emerald-500/30 font-bold flex items-center gap-1.5">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span>DRIVER AI</span>
+              </button>
+              <button id="btn-quick-lock" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:border-slate-500 flex items-center gap-1.5">
+                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                <span>LOCK/UNLOCK</span>
+              </button>
+              <button id="btn-quick-lights" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:border-slate-500 flex items-center gap-1.5">
+                <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i>
+                <span>HEADLIGHTS</span>
+              </button>
+              <button id="btn-quick-windows" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:border-slate-500 flex items-center gap-1.5">
+                <i data-lucide="wind" class="w-3.5 h-3.5"></i>
+                <span>WINDOWS</span>
+              </button>
+              <button id="btn-quick-trunk" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:border-slate-500 flex items-center gap-1.5">
+                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                <span>TRUNK/DICKY</span>
+              </button>
+            </div>
+            <div class="text-[11px] text-slate-400 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+              <span>SYNCHRONIZED REAL-TIME CAN-BUS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Quick Telemetry Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div id="card-master-security" class="cyber-panel p-4 rounded-2xl"></div>
+          <div id="card-driver-safety" class="cyber-panel p-4 rounded-2xl"></div>
+          <div id="card-doors-dash" class="cyber-panel p-4 rounded-2xl"></div>
+          <div id="card-lights-dash" class="cyber-panel p-4 rounded-2xl"></div>
+        </div>
+
+        <!-- Middle Telemetry Deck: Battery, Climate, Tires, Location -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Battery & Powertrain -->
+          <div class="cyber-panel p-5 rounded-2xl flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+                <span>POWERTRAIN &amp; RANGE</span>
+                <span class="text-emerald-400 font-bold">HEALTH: 99%</span>
+              </div>
+              <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-extrabold text-white font-mono">86%</span>
+                <span class="text-sm font-mono text-slate-400">· 432 km Est. Range</span>
+              </div>
+              <!-- Battery progress bar -->
+              <div class="w-full h-3 rounded-full bg-slate-800 mt-4 overflow-hidden p-0.5 border border-slate-700">
+                <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-cyan-400" style="width: 86%;"></div>
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Dual Permanent Magnet Motors</span>
+              <span class="text-cyan-300">Fast-Charging Ready</span>
+            </div>
+          </div>
+
+          <!-- Cabin Climate Control -->
+          <div class="cyber-panel p-5 rounded-2xl flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+                <span>CABIN CLIMATE (HVAC)</span>
+                <span class="text-cyan-400 font-bold">AUTO 2-ZONE</span>
+              </div>
+              <div class="flex items-center justify-between mt-2">
+                <div>
+                  <span id="dash-temp-val" class="text-3xl font-extrabold text-white font-mono">21.5°C</span>
+                  <div class="text-xs font-mono text-slate-400 mt-0.5">Target Comfort Level</div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button id="btn-dash-temp-minus" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-lg flex items-center justify-center">
+                    -
+                  </button>
+                  <button id="btn-dash-temp-plus" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-lg flex items-center justify-center">
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Air Purification: HEPA Active</span>
+              <span class="text-emerald-400">Cabin Sealed</span>
+            </div>
+          </div>
+
+          <!-- Tire Pressure (TPMS) -->
+          <div class="cyber-panel p-5 rounded-2xl flex flex-col justify-between">
+            <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+              <span>TIRE PRESSURE (TPMS)</span>
+              <span class="text-emerald-400 font-bold">NOMINAL</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-1 font-mono text-xs">
+              <div class="p-2 rounded-xl bg-slate-900 border border-slate-800 flex justify-between">
+                <span class="text-slate-400">FL:</span>
+                <span class="text-cyan-300 font-bold">36 PSI</span>
+              </div>
+              <div class="p-2 rounded-xl bg-slate-900 border border-slate-800 flex justify-between">
+                <span class="text-slate-400">FR:</span>
+                <span class="text-cyan-300 font-bold">36 PSI</span>
+              </div>
+              <div class="p-2 rounded-xl bg-slate-900 border border-slate-800 flex justify-between">
+                <span class="text-slate-400">RL:</span>
+                <span class="text-cyan-300 font-bold">35 PSI</span>
+              </div>
+              <div class="p-2 rounded-xl bg-slate-900 border border-slate-800 flex justify-between">
+                <span class="text-slate-400">RR:</span>
+                <span class="text-cyan-300 font-bold">36 PSI</span>
+              </div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-400 text-right">
+              Pressure checked 2 mins ago
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activities Feed -->
+        <div class="cyber-panel p-5 rounded-2xl">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <i data-lucide="clock" class="w-4 h-4 text-cyan-400"></i>
+              <span class="text-xs font-mono uppercase text-slate-300 font-bold tracking-wider">Live Security &amp; Control Activity Log</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-500">Auto-synchronized</span>
+          </div>
+          <div id="activities-list" class="mt-4 flex flex-col gap-2"></div>
+        </div>
+
+      </section>
+
+      <!-- ================= 2. CONTROLS VIEW ================= -->
+      <section id="view-controls" class="tab-content flex-col gap-6 hidden">
+        <div class="flex flex-col gap-2">
+          <h2 class="text-xl font-bold font-mono text-white">Vehicle Master Switches &amp; Hardware Controls</h2>
+          <p class="text-xs text-slate-400">Every toggle updates the car schematic, audio feedback, and synchronized telemetry.</p>
+        </div>
+
+        <!-- Primary Switch Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Master Sentry Switch -->
+          <div class="cyber-panel p-5 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center neon-glow-cyan">
+                <i data-lucide="shield" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">Master Car Security</div>
+                <div class="text-xs text-slate-400">360° Perimeter Sentry Guard</div>
+              </div>
+            </div>
+            <label class="cyber-switch">
+              <input type="checkbox" id="ctrl-toggle-security">
+              <span class="cyber-slider"></span>
+            </label>
+          </div>
+
+          <!-- Driver Safety Switch -->
+          <div class="cyber-panel p-5 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center neon-glow-emerald">
+                <i data-lucide="eye" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">Driver Safety (DMS)</div>
+                <div class="text-xs text-slate-400">Infrared Drowsiness AI</div>
+              </div>
+            </div>
+            <label class="cyber-switch">
+              <input type="checkbox" id="ctrl-toggle-dms">
+              <span class="cyber-slider"></span>
+            </label>
+          </div>
+
+          <!-- Matrix LED Headlights Switch -->
+          <div class="cyber-panel p-5 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                <i data-lucide="lightbulb" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">Matrix Headlights</div>
+                <div class="text-xs text-slate-400">Laser Projection Beams</div>
+              </div>
+            </div>
+            <label class="cyber-switch">
+              <input type="checkbox" id="ctrl-toggle-headlights">
+              <span class="cyber-slider"></span>
+            </label>
+          </div>
+
+          <!-- Central Door Locks Switch -->
+          <div class="cyber-panel p-5 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center">
+                <i data-lucide="lock" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">Central Door Locks</div>
+                <div class="text-xs text-slate-400">All 4 Solenoids Locked</div>
+              </div>
+            </div>
+            <label class="cyber-switch">
+              <input type="checkbox" id="ctrl-toggle-doors">
+              <span class="cyber-slider"></span>
+            </label>
+          </div>
+
+          <!-- Power Windows Switch -->
+          <div class="cyber-panel p-5 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center">
+                <i data-lucide="wind" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">Power Windows</div>
+                <div class="text-xs text-slate-400">Ventilation Drop Mode</div>
+              </div>
+            </div>
+            <label class="cyber-switch">
+              <input type="checkbox" id="ctrl-toggle-windows">
+              <span class="cyber-slider"></span>
+            </label>
+          </div>
+
+          <!-- Powered Trunk / Dicky Switch -->
+          <div class="cyber-panel p-5 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                <i data-lucide="layers" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">Powered Trunk / Dicky</div>
+                <div class="text-xs text-slate-400">Rear Cargo Hatch Latch</div>
+              </div>
+            </div>
+            <label class="cyber-switch">
+              <input type="checkbox" id="ctrl-toggle-trunk">
+              <span class="cyber-slider"></span>
+            </label>
+          </div>
+
+          <!-- GPS Tracking Switch -->
+          <div class="cyber-panel p-5 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">GPS Telemetry Tracking</div>
+                <div class="text-xs text-slate-400">GNSS Multi-Satellite Relay</div>
+              </div>
+            </div>
+            <label class="cyber-switch">
+              <input type="checkbox" id="ctrl-toggle-gps">
+              <span class="cyber-slider"></span>
+            </label>
+          </div>
+
+          <!-- Emergency Horn & Hazards -->
+          <div class="cyber-panel p-5 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center">
+                <i data-lucide="volume-2" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">Locator Horn &amp; Hazards</div>
+                <div class="text-xs text-slate-400">Audible acoustic chime</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="btn-ctrl-horn" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-xs font-mono text-cyan-300 border border-slate-700 hover:border-cyan-400">
+                HORN
+              </button>
+              <button id="btn-ctrl-hazards" class="px-2.5 py-1.5 rounded-lg bg-amber-950 text-xs font-mono text-amber-300 border border-amber-700 hover:border-amber-400">
+                HAZARDS
+              </button>
+            </div>
+          </div>
+
+          <!-- Cabin Climate Adjustment -->
+          <div class="cyber-panel p-5 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                <i data-lucide="thermometer" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white">Cabin Climate Setpoint</div>
+                <div id="ctrl-temp-val" class="text-xs font-mono text-cyan-300 font-bold">21.5°C</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="btn-ctrl-temp-minus" class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 text-white font-bold">-</button>
+              <button id="btn-ctrl-temp-plus" class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 text-white font-bold">+</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 3. CAR TRACKING VIEW ================= -->
+      <section id="view-tracking" class="tab-content flex-col gap-6 hidden">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold font-mono text-white">GNSS Satellite Vehicle Tracking</h2>
+            <p class="text-xs text-slate-400">Real-time geofence surveillance and parking bay locator beacon.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-find-my-car" class="px-4 py-2 rounded-xl bg-cyan-500/20 border border-cyan-400 text-cyan-200 text-xs font-mono font-bold hover:bg-cyan-500/30 neon-glow-cyan flex items-center gap-2">
+              <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
+              <span>FIND MY CAR</span>
+            </button>
+            <button id="btn-refresh-location" class="px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono hover:border-slate-500 flex items-center gap-2">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              <span>REFRESH</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Simulated Radar Map Canvas -->
+        <div class="relative w-full h-[380px] rounded-2xl overflow-hidden border border-cyan-500/30 bg-[#04060A] cyber-grid-bg flex items-center justify-center">
+          <!-- Concentric Distance Rings -->
+          <div class="absolute w-[320px] h-[320px] rounded-full border border-cyan-500/15 pointer-events-none"></div>
+          <div class="absolute w-[220px] h-[220px] rounded-full border border-cyan-500/25 pointer-events-none"></div>
+          <div class="absolute w-[120px] h-[120px] rounded-full border border-cyan-500/40 border-dashed pointer-events-none"></div>
+
+          <!-- Radar Sweep Line -->
+          <div class="absolute w-[320px] h-[320px] rounded-full overflow-hidden pointer-events-none">
+            <div class="w-full h-full animate-radar" style="background: conic-gradient(from 0deg at 50% 50%, rgba(0, 229, 255, 0.25) 0deg, transparent 60deg);"></div>
+          </div>
+
+          <!-- Geofence Safe Zone Ring -->
+          <div class="absolute w-[260px] h-[260px] rounded-full border-2 border-emerald-500/30 bg-emerald-500/5 pointer-events-none flex items-center justify-center">
+            <div class="absolute -top-3 px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[9px] font-mono">
+              SAFE GEOFENCE (250m)
+            </div>
+          </div>
+
+          <!-- Vehicle Marker Pin -->
+          <div class="relative z-10 flex flex-col items-center">
+            <div class="relative flex items-center justify-center">
+              <div class="w-8 h-8 rounded-full bg-cyan-400/30 animate-ping absolute"></div>
+              <div class="w-10 h-10 rounded-full bg-cyan-500 border-2 border-white flex items-center justify-center shadow-lg shadow-cyan-500/50 text-black">
+                <i data-lucide="navigation" class="w-5 h-5 transform rotate-45"></i>
+              </div>
+            </div>
+            <div class="mt-2 px-3 py-1 rounded-xl bg-slate-900/95 border border-cyan-500/50 text-[11px] font-mono font-bold text-white shadow-xl">
+              SmartGuard EV-9
+            </div>
+          </div>
+
+          <!-- HUD Bottom Bar on Map -->
+          <div class="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-slate-950/90 border border-slate-800 backdrop-blur-md flex flex-wrap items-center justify-between text-xs font-mono">
+            <div>
+              <div class="text-slate-400">Stationed Location:</div>
+              <div id="track-address" class="text-white font-bold">DLF Cyber City, Sector 24, Gurugram, India</div>
+            </div>
+            <div class="flex items-center gap-4 text-slate-300">
+              <div>Bay: <strong id="track-bay" class="text-cyan-300">Level B2 · Bay 07</strong></div>
+              <div>Coordinates: <strong id="track-coords" class="text-cyan-300">28.4986° N, 77.0894° E</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. AI SECURITY VIEW ================= -->
+      <section id="view-security" class="tab-content flex-col gap-6 hidden">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold font-mono text-white">360° Sentry Anti-Theft AI Surveillance</h2>
+            <p class="text-xs text-slate-400">Autonomous edge perception, motion buffers, and intrusion deterrence.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div id="security-status-badge"></div>
+            <button id="btn-toggle-security-page" class="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 text-xs font-mono font-bold hover:bg-cyan-500/30">
+              TOGGLE SENTRY
+            </button>
+          </div>
+        </div>
+
+        <!-- Sentry Camera Feed Preview -->
+        <div class="relative w-full aspect-16/9 max-h-[460px] rounded-2xl overflow-hidden border border-cyan-500/30 bg-black">
+          <img
+            src="/src/assets/images/sentry_perimeter_camera_1792818526033.jpg"
+            alt="360 Sentry Perimeter Live Camera"
+            class="w-full h-full object-cover brightness-95"
+          />
+
+          <!-- HUD HUD Camera Overlay -->
+          <div class="absolute inset-0 pointer-events-none p-5 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <div class="flex items-center gap-2 px-2.5 py-1 rounded bg-red-950/90 border border-red-500/60 text-red-300">
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                <span>REC · SENTRY PERIMETER CAM 01 [WIDE]</span>
+              </div>
+              <div class="px-2.5 py-1 rounded bg-black/75 border border-slate-700 text-slate-300">
+                FPS: 60 · 4K HDR · NIGHT-VISION ON
+              </div>
+            </div>
+
+            <!-- Target Bounding Box -->
+            <div class="absolute top-[35%] left-[62%] w-32 h-44 border-2 border-cyan-400/80 rounded bg-cyan-500/10 pointer-events-none flex flex-col justify-between p-1.5 font-mono text-[9px] text-cyan-300">
+              <div>TRACK_ID: #4092</div>
+              <div>CONFIDENCE: 96.8%</div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs font-mono text-slate-300 bg-black/60 p-2 rounded backdrop-blur-sm">
+              <span>CAN-BUS ACOUSTIC SENSORS: 4/4 ONLINE</span>
+              <span class="text-cyan-400">EDGE NPU LATENCY: 8ms</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulation Triggers Grid -->
+        <div class="cyber-panel p-5 rounded-2xl">
+          <div class="text-xs font-mono text-slate-400 uppercase font-bold tracking-wider mb-3">
+            Simulate Security Incidents &amp; Verify Audio-Visual Response
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <button id="btn-sim-intrusion" class="p-4 rounded-xl bg-slate-900 border border-red-500/40 hover:border-red-400 hover:bg-red-950/20 text-left transition-all group">
+              <div class="flex items-center gap-2 text-red-400 font-bold text-sm mb-1">
+                <i data-lucide="alert-octagon" class="w-4 h-4"></i>
+                <span>Simulate Intrusion</span>
+              </div>
+              <p class="text-[11px] text-slate-400">Tests door forced-open sensor, alarm siren, voice alert, and security lockout.</p>
+            </button>
+
+            <button id="btn-sim-impact" class="p-4 rounded-xl bg-slate-900 border border-amber-500/40 hover:border-amber-400 hover:bg-amber-950/20 text-left transition-all group">
+              <div class="flex items-center gap-2 text-amber-400 font-bold text-sm mb-1">
+                <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                <span>Simulate Impact</span>
+              </div>
+              <p class="text-[11px] text-slate-400">Tests acoustic glass breakage, 3-axis accelerometer shock spike, and cloud clip commit.</p>
+            </button>
+
+            <button id="btn-sim-suspicious" class="p-4 rounded-xl bg-slate-900 border border-cyan-500/40 hover:border-cyan-400 hover:bg-cyan-950/20 text-left transition-all group">
+              <div class="flex items-center gap-2 text-cyan-400 font-bold text-sm mb-1">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+                <span>Simulate Suspicious Activity</span>
+              </div>
+              <p class="text-[11px] text-slate-400">Tests blindspot loitering recognition and automatic courtesy warning strobe.</p>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 5. DRIVER SAFETY VIEW ================= -->
+      <section id="view-driver" class="tab-content flex-col gap-6 hidden">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold font-mono text-white">Driver Attention &amp; Drowsiness Monitor (DMS)</h2>
+            <p class="text-xs text-slate-400">Infrared steering-column eye tracker, PERCLOS calculation, and fatigue intervention.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div id="dms-fatigue-badge" class="px-3 py-1 rounded-full text-xs font-bold font-mono border">NORMAL</div>
+            <button id="btn-toggle-dms-page" class="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-400 text-emerald-300 text-xs font-mono font-bold hover:bg-emerald-500/30">
+              TOGGLE DMS
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- DMS Camera Preview -->
+          <div class="lg:col-span-2 relative aspect-16/10 rounded-2xl overflow-hidden border border-emerald-500/30 bg-black">
+            <img
+              src="/src/assets/images/driver_monitoring_feed_1792818526816.jpg"
+              alt="Driver Monitoring Infrared Feed"
+              class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 pointer-events-none p-4 flex flex-col justify-between">
+              <div class="flex items-center justify-between text-xs font-mono">
+                <div class="px-2.5 py-1 rounded bg-emerald-950/90 border border-emerald-500/60 text-emerald-300 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>INFRARED 940nm STEERING SENSOR ACTIVE</span>
+                </div>
+                <div class="px-2.5 py-1 rounded bg-black/80 text-slate-300 border border-slate-700">
+                  LATENCY: 12ms
+                </div>
+              </div>
+              <div class="p-2 rounded bg-black/70 border border-slate-800 text-xs font-mono text-slate-300 flex justify-between">
+                <span>HEAD POSE: 0.2° YAW · -1.4° PITCH</span>
+                <span class="text-emerald-400">PERCLOS ALGORITHM: ISO 15007</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Biometric Gauges Deck -->
+          <div class="cyber-panel p-5 rounded-2xl flex flex-col justify-between gap-4">
+            <div>
+              <div class="text-xs font-mono text-slate-400 uppercase font-bold mb-4">Real-Time Biometrics</div>
+
+              <!-- Attention Score -->
+              <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 mb-3">
+                <div class="flex justify-between text-xs font-mono text-slate-400">
+                  <span>Attention Score</span>
+                  <span id="dms-attention-score" class="text-emerald-400 font-bold">98%</span>
+                </div>
+              </div>
+
+              <!-- PERCLOS -->
+              <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 mb-3">
+                <div class="flex justify-between text-xs font-mono text-slate-400">
+                  <span>PERCLOS (% Eyes Closed)</span>
+                  <span id="dms-perclos" class="text-cyan-300 font-bold">8%</span>
+                </div>
+                <div class="text-[10px] text-slate-500 mt-1">Threshold: &gt;70% triggers critical chime</div>
+              </div>
+
+              <!-- Blink Rate -->
+              <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 mb-3">
+                <div class="flex justify-between text-xs font-mono text-slate-400">
+                  <span>Blink Frequency</span>
+                  <span id="dms-blink-rate" class="text-slate-200 font-bold">18 / min</span>
+                </div>
+              </div>
+
+              <!-- Gaze Vector -->
+              <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+                <div class="flex justify-between text-xs font-mono text-slate-400">
+                  <span>Gaze Direction</span>
+                  <span id="dms-gaze" class="text-slate-200 font-bold">Forward</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- DMS Action Buttons -->
+            <div class="flex flex-col gap-2 pt-2">
+              <button id="btn-sim-drowsiness" class="w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-mono font-bold shadow-lg shadow-red-600/30 transition-all flex items-center justify-center gap-2">
+                <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                <span>SIMULATE DROWSINESS</span>
+              </button>
+              <button id="btn-reset-dms" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono border border-slate-700">
+                RESET TO NORMAL BASELINE
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 text-xs text-slate-400 flex items-start gap-3">
+          <i data-lucide="info" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
+          <div>
+            <strong>Technical Note:</strong> Simulated prototype for evaluation and competitions. Real-world driver drowsiness intervention requires a validated infrared steering-column camera, synchronized edge AI models, and direct CAN-bus audio alert integration.
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. NOTIFICATIONS VIEW ================= -->
+      <section id="view-notifications" class="tab-content flex-col gap-6 hidden">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold font-mono text-white">Security &amp; Safety Notifications Hub</h2>
+            <p class="text-xs text-slate-400">Chronological history of security alarms, driver alerts, and vehicle actions.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-mark-all-read" class="px-3.5 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono hover:border-slate-500">
+              MARK ALL READ
+            </button>
+            <button id="btn-clear-demo-events" class="px-3.5 py-1.5 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs font-mono hover:bg-red-950">
+              CLEAR EVENTS
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="flex items-center gap-2 font-mono text-xs">
+          <button class="notif-filter-btn px-3 py-1.5 rounded-lg border border-slate-800 bg-cyan-500/20 text-cyan-300 font-bold" data-filter="all">ALL</button>
+          <button class="notif-filter-btn px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400" data-filter="security">SECURITY</button>
+          <button class="notif-filter-btn px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400" data-filter="safety">SAFETY (DMS)</button>
+          <button class="notif-filter-btn px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400" data-filter="controls">CONTROLS</button>
+        </div>
+
+        <!-- Notifications List -->
+        <div id="notifications-list" class="flex flex-col gap-3"></div>
+      </section>
+
+      <!-- ================= 7. SETTINGS VIEW ================= -->
+      <section id="view-settings" class="tab-content flex-col gap-6 hidden">
+        <div class="flex flex-col gap-2">
+          <h2 class="text-xl font-bold font-mono text-white">System Settings &amp; Preferences</h2>
+          <p class="text-xs text-slate-400">Configure audible sound synthesis, spoken alerts, voice recognition language, and demo parameters.</p>
+        </div>
+
+        <div class="cyber-panel p-6 rounded-2xl flex flex-col gap-6 max-w-2xl">
+          <!-- Web Audio Synth -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div>
+              <div class="text-sm font-bold text-white">Web Audio Sound FX</div>
+              <div class="text-xs text-slate-400">Synthesizes futuristic chirp clicks, central locking, and siren alarms.</div>
+            </div>
+            <label class="cyber-switch">
+              <input type="checkbox" id="setting-sound" checked>
+              <span class="cyber-slider"></span>
+            </label>
+          </div>
+
+          <!-- Spoken Voice Alerts on Buttons -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div>
+              <div class="text-sm font-bold text-white">Button Spoken Voice Alerts</div>
+              <div class="text-xs text-slate-400">Speaks out loud in English or Hindi whenever any button is pressed.</div>
+            </div>
+            <label class="cyber-switch">
+              <input type="checkbox" id="setting-voice" checked>
+              <span class="cyber-slider"></span>
+            </label>
+          </div>
+
+          <!-- Preferred Language Selector -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div>
+              <div class="text-sm font-bold text-white">Speech &amp; Voice Language</div>
+              <div class="text-xs text-slate-400">Choose between English (en-US) or Hindi (hi-IN) for voice feedback.</div>
+            </div>
+            <select id="setting-lang" class="bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-1.5 text-xs font-mono">
+              <option value="en-US">English (en-US)</option>
+              <option value="hi-IN">हिन्दी (Hindi / Hinglish)</option>
+            </select>
+          </div>
+
+          <!-- DMS Sensitivity -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div>
+              <div class="text-sm font-bold text-white">Drowsiness DMS Sensitivity</div>
+              <div class="text-xs text-slate-400">Adjust PERCLOS trigger threshold for driver fatigue alert.</div>
+            </div>
+            <select id="setting-sens" class="bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-1.5 text-xs font-mono">
+              <option value="high">High (PERCLOS &gt; 60%)</option>
+              <option value="standard" selected>Standard (PERCLOS &gt; 70%)</option>
+              <option value="low">Low (PERCLOS &gt; 80%)</option>
+            </select>
+          </div>
+
+          <!-- Factory Reset Demo -->
+          <div class="flex items-center justify-between pt-2">
+            <div>
+              <div class="text-sm font-bold text-red-400">Reset Demo State</div>
+              <div class="text-xs text-slate-500">Clears local storage and restores all states to factory defaults.</div>
+            </div>
+            <button id="btn-reset-demo-state" class="px-4 py-2 rounded-xl bg-red-950 border border-red-800 text-red-200 text-xs font-mono font-bold hover:bg-red-900">
+              RESET ALL
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Floating Action Button (FAB) for Voice Assistant in Bottom-Right -->
+    <button id="btn-open-voice-fab" class="fixed bottom-6 right-6 z-30 w-14 h-14 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black flex items-center justify-center shadow-2xl shadow-cyan-500/50 transition-all neon-glow-cyan" title="Voice Assistant">
+      <i data-lucide="mic" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Floating Spoken Voice Announcement Toast (Top Right) -->
+    <div id="voice-feedback-toast" class="fixed top-20 right-6 z-50 transition-all duration-300 hidden"></div>
+
+    <!-- Critical Alert Modal (Intrusion / Drowsiness) -->
+    <div id="critical-alert-modal" class="hidden"></div>
+
+    <!-- ================= VOICE ASSISTANT MODAL ================= -->
+    <div id="voice-assistant-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 items-center justify-center p-4 hidden">
+      <div class="max-w-lg w-full cyber-panel rounded-2xl border border-cyan-500/50 p-6 flex flex-col gap-5">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold font-mono text-white">SmartGuard Voice Assistant</h3>
+              <p class="text-[11px] text-slate-400 font-mono">Bilingual NLU · English, Hindi &amp; Hinglish</p>
+            </div>
+          </div>
+          <button id="btn-close-voice-modal" class="text-slate-400 hover:text-white p-1">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Waveform visualizer & Mic Toggle -->
+        <div class="flex flex-col items-center justify-center py-4 bg-slate-950/60 rounded-2xl border border-slate-800/80">
+          <div class="flex items-center gap-1.5 h-10 mb-4">
+            <span class="w-1 bg-cyan-400 rounded-full wave-bar" style="animation-delay: 0ms;"></span>
+            <span class="w-1 bg-cyan-400 rounded-full wave-bar" style="animation-delay: 150ms;"></span>
+            <span class="w-1 bg-cyan-300 rounded-full wave-bar" style="animation-delay: 300ms;"></span>
+            <span class="w-1 bg-cyan-200 rounded-full wave-bar" style="animation-delay: 450ms;"></span>
+            <span class="w-1 bg-cyan-300 rounded-full wave-bar" style="animation-delay: 600ms;"></span>
+            <span class="w-1 bg-cyan-400 rounded-full wave-bar" style="animation-delay: 750ms;"></span>
+          </div>
+
+          <button id="btn-mic-toggle" class="w-16 h-16 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black flex items-center justify-center shadow-xl shadow-cyan-500/40 transition-all">
+            <i data-lucide="mic" class="w-7 h-7"></i>
+          </button>
+          <div id="mic-listening-indicator" class="text-xs font-mono text-slate-300 mt-3">
+            Tap Mic to Speak or type below
+          </div>
+        </div>
+
+        <!-- Typed Command Fallback Input -->
+        <div class="flex items-center gap-2">
+          <input
+            type="text"
+            id="voice-input-text"
+            placeholder="Type e.g. 'light on karo' or 'lock car'..."
+            class="flex-1 bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-4 py-2 text-xs font-mono text-white outline-none"
+          />
+          <button id="btn-submit-voice-text" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-mono font-bold">
+            SEND
+          </button>
+        </div>
+
+        <!-- Preset Command Suggestions -->
+        <div>
+          <div class="text-[11px] font-mono text-slate-400 mb-2">Try these quick commands:</div>
+          <div class="flex flex-wrap gap-1.5 text-[11px] font-mono">
+            <button class="preset-command-chip px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 hover:border-cyan-400 border border-slate-800 text-slate-300" data-cmd="light on karo">light on karo</button>
+            <button class="preset-command-chip px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 hover:border-cyan-400 border border-slate-800 text-slate-300" data-cmd="headlights off karo">headlights off karo</button>
+            <button class="preset-command-chip px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 hover:border-cyan-400 border border-slate-800 text-slate-300" data-cmd="car lock karo">car lock karo</button>
+            <button class="preset-command-chip px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 hover:border-cyan-400 border border-slate-800 text-slate-300" data-cmd="window kholo">window kholo</button>
+            <button class="preset-command-chip px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 hover:border-cyan-400 border border-slate-800 text-slate-300" data-cmd="dicky kholo">dicky kholo</button>
+            <button class="preset-command-chip px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 hover:border-cyan-400 border border-slate-800 text-slate-300" data-cmd="security on karo">security on karo</button>
+            <button class="preset-command-chip px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 hover:border-cyan-400 border border-slate-800 text-slate-300" data-cmd="gaadi kahan hai">gaadi kahan hai</button>
+          </div>
+        </div>
+
+        <!-- Voice Recognition Output & Execution Feedback -->
+        <div id="voice-output-container"></div>
+      </div>
+    </div>
+
+    <!-- Application Controller -->
+    <script type="module" src="/script.js"></script>
   </body>
 </html>
