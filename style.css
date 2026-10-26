@@ -182,3 +182,18 @@ input:checked + .cyber-slider:before {
 .tab-content.flex {
   display: flex;
 }
+
+/* Authentic High-Security Vehicle Registration Plate (HSRP) & Shimmer */
+.hsrp-plate {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 50%, #E2E8F0 100%);
+  color: #0F172A;
+  border: 2px solid #1E293B;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(0,0,0,0.2);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8), -1px -1px 0 rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.18em;
+}
+
+.hsrp-holo {
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(0,229,255,0.3) 50%, rgba(245,158,11,0.3) 100%);
+}
+

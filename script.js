@@ -58,9 +58,22 @@ const NOMINAL_METRICS = {
   fatigueLevel: 'Normal'
 };
 
+const INITIAL_PROFILE_STATE = {
+  ownerName: 'Piyush Sharma',
+  carBrand: 'SmartGuard',
+  carModel: 'EV-9 CyberSedan',
+  plateNumber: 'SG-2026-AI',
+  vinNumber: 'SG9EV-2026-X8849',
+  contactNumber: '+91 98765 43210',
+  registrationDate: '2026-03-15',
+  isConfigured: true
+};
+
 // Global reactive state
 let state = {
   vehicle: { ...INITIAL_VEHICLE_STATE },
+  profile: { ...INITIAL_PROFILE_STATE },
+  profileEditMode: false,
   location: { ...INITIAL_LOCATION_STATE },
   settings: { ...INITIAL_SETTINGS },
   drowsinessMetrics: { ...NOMINAL_METRICS },
@@ -129,6 +142,17 @@ try {
   if (savedS) state.settings = { ...INITIAL_SETTINGS, ...JSON.parse(savedS) };
   const savedA = localStorage.getItem('sg_alerts');
   if (savedA) state.alerts = JSON.parse(savedA);
+  const savedP = localStorage.getItem('sg_user_profile');
+  if (savedP) {
+    state.profile = { ...INITIAL_PROFILE_STATE, ...JSON.parse(savedP) };
+  }
+  // Synchronize vehicle plate and model with profile
+  if (state.profile.plateNumber) {
+    state.vehicle.plateNumber = state.profile.plateNumber;
+  }
+  if (state.profile.carBrand && state.profile.carModel) {
+    state.vehicle.carModel = `${state.profile.carBrand} ${state.profile.carModel}`.trim();
+  }
 } catch (e) {
   console.warn('Storage restore error:', e);
 }
@@ -138,6 +162,7 @@ function persistState() {
     localStorage.setItem('sg_vehicle_state', JSON.stringify(state.vehicle));
     localStorage.setItem('sg_settings', JSON.stringify(state.settings));
     localStorage.setItem('sg_alerts', JSON.stringify(state.alerts));
+    localStorage.setItem('sg_user_profile', JSON.stringify(state.profile));
   } catch (e) {}
 }
 
@@ -426,6 +451,10 @@ const VOICE_ALERT_MESSAGES = {
     en: 'Critical Warning: Driver drowsiness detected. Please stop safely and take a break.',
     hi: 'अति-महत्वपूर्ण चेतावनी: ड्राइवर को नींद आने का संकेत। कृपया गाड़ी रोकें और विश्राम लें।',
     isEmergency: true
+  },
+  profileSaved: {
+    en: 'Alert: Vehicle owner profile saved and registration number updated.',
+    hi: 'चेतावनी: वाहन प्रोफ़ाइल सुरक्षित की गई और नंबर प्लेट अपडेट की गई।'
   }
 };
 
@@ -880,6 +909,20 @@ function parseVoiceCommand(rawInput) {
       rawCommand: rawInput,
       intent: 'STATUS_QUERY',
       confidence: 0.95
+    };
+  }
+
+  // 12. OWNER PROFILE & REGISTRATION QUERY
+  if (hasAny(norm, ['owner', 'profile', 'malik', 'registration', 'plate number', 'gadi number', 'registration number', 'मालिक', 'प्रोफ़ाइल', 'नंबर'])) {
+    return {
+      understood: true,
+      actionTaken: 'Reported Vehicle Ownership Profile',
+      responseTextEn: `Vehicle ${state.vehicle.carModel} with registration plate ${state.vehicle.plateNumber} is registered to ${state.profile.ownerName}.`,
+      responseTextHi: `गाड़ी ${state.vehicle.carModel} (नंबर: ${state.vehicle.plateNumber}) श्री/सुश्री ${state.profile.ownerName} के नाम पर पंजीकृत है।`,
+      category: 'controls',
+      rawCommand: rawInput,
+      intent: 'PROFILE_QUERY',
+      confidence: 0.96
     };
   }
 
@@ -1772,7 +1815,254 @@ function renderVoiceResult(res) {
   });
 }
 
+// --- 8.1 PROFILE & NUMBER PLATE HANDLERS ---
+function validatePlateNumber(rawPlate) {
+  if (!rawPlate || typeof rawPlate !== 'string' || !rawPlate.trim()) {
+    return {
+      isValid: false,
+      message: 'Registration plate cannot be empty. Please enter plate number.',
+      formatted: ''
+    };
+  }
+
+  const cleaned = rawPlate.trim().toUpperCase();
+  const sanitized = cleaned.replace(/[^A-Z0-9 -]/g, '').replace(/\s+/g, ' ');
+  const alphanumericOnly = sanitized.replace(/[^A-Z0-9]/g, '');
+
+  if (alphanumericOnly.length < 4) {
+    return {
+      isValid: false,
+      message: 'Plate number is too short (minimum 4 alphanumeric characters).',
+      formatted: sanitized
+    };
+  }
+
+  if (alphanumericOnly.length > 14) {
+    return {
+      isValid: false,
+      message: 'Plate number is too long (maximum 14 characters).',
+      formatted: sanitized
+    };
+  }
+
+  const hasLetter = /[A-Z]/.test(alphanumericOnly);
+  const hasDigit = /[0-9]/.test(alphanumericOnly);
+
+  if (!hasLetter || !hasDigit) {
+    return {
+      isValid: false,
+      message: 'Plate must include letters and numbers (e.g. SG-2026-AI or DL-01-AB-1234).',
+      formatted: sanitized
+    };
+  }
+
+  return {
+    isValid: true,
+    message: 'Valid vehicle registration number format (HSRP compliant).',
+    formatted: sanitized
+  };
+}
+
+function renderVehiclePlateAndBadges() {
+  const plate = state.profile?.plateNumber || state.vehicle.plateNumber || 'SG-2026-AI';
+  const brand = state.profile?.carBrand || 'SmartGuard';
+  const model = state.profile?.carModel || 'EV-9 CyberSedan';
+  const fullName = `${brand} ${model}`.trim();
+  const owner = state.profile?.ownerName || 'Piyush Sharma';
+  const initial = (owner.trim() || 'P').charAt(0).toUpperCase();
+
+  // 1. On-Car Visualizer Front Number Plate
+  const onCarPlate = document.getElementById('on-car-plate-number');
+  if (onCarPlate) onCarPlate.textContent = plate;
+
+  // 2. Dashboard Top HUD Plate Badge
+  const dashPlate = document.getElementById('dashboard-plate-badge');
+  if (dashPlate) dashPlate.textContent = plate;
+
+  // 3. Header Top HUD Plate Badge
+  const headerPlate = document.getElementById('header-plate-badge');
+  if (headerPlate) headerPlate.textContent = plate;
+
+  // 4. Dashboard Car Model text
+  const dashModel = document.getElementById('dashboard-car-model');
+  if (dashModel) dashModel.textContent = fullName;
+
+  // 5. Header Owner Name & Avatar
+  const headerOwner = document.getElementById('header-owner-name');
+  if (headerOwner) headerOwner.textContent = owner;
+  const headerAvatar = document.getElementById('header-avatar-circle');
+  if (headerAvatar) headerAvatar.textContent = initial;
+}
+
+function updateLiveProfilePreview() {
+  const inputName = document.getElementById('input-profile-name')?.value || state.profile.ownerName || 'Piyush Sharma';
+  const inputBrand = document.getElementById('input-profile-brand')?.value || state.profile.carBrand || 'SmartGuard';
+  const inputModel = document.getElementById('input-profile-model')?.value || state.profile.carModel || 'EV-9 CyberSedan';
+  const rawPlate = document.getElementById('input-profile-plate')?.value || state.profile.plateNumber || 'SG-2026-AI';
+
+  const validation = validatePlateNumber(rawPlate);
+  const formattedPlate = validation.formatted || rawPlate.toUpperCase() || 'SG-2026-AI';
+  const initial = (inputName.trim() || 'P').charAt(0).toUpperCase();
+  const fullName = `${inputBrand} ${inputModel}`.trim();
+
+  // Update Live Preview elements
+  const prevPlate = document.getElementById('preview-plate-number');
+  if (prevPlate) prevPlate.textContent = formattedPlate;
+
+  const prevCar = document.getElementById('preview-car-fullname');
+  if (prevCar) prevCar.textContent = fullName;
+
+  const prevBadge = document.getElementById('preview-plate-badge');
+  if (prevBadge) prevBadge.textContent = formattedPlate;
+
+  const prevOwner = document.getElementById('preview-owner-name');
+  if (prevOwner) prevOwner.textContent = inputName;
+
+  const prevAvatar = document.getElementById('preview-avatar');
+  if (prevAvatar) prevAvatar.textContent = initial;
+
+  // Validation message box
+  const valMsg = document.getElementById('plate-validation-msg');
+  if (valMsg) {
+    if (validation.isValid) {
+      valMsg.className = 'mt-2 p-2.5 rounded-xl border bg-emerald-950/40 border-emerald-500/50 text-emerald-300 text-xs font-mono flex items-center gap-2';
+      valMsg.innerHTML = `
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+        <span>${validation.message}</span>
+      `;
+    } else {
+      valMsg.className = 'mt-2 p-2.5 rounded-xl border bg-amber-950/40 border-amber-500/50 text-amber-300 text-xs font-mono flex items-center gap-2';
+      valMsg.innerHTML = `
+        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 shrink-0"></i>
+        <span>${validation.message}</span>
+      `;
+    }
+    if (window.lucide) window.lucide.createIcons();
+  }
+}
+
+function renderProfileView() {
+  const p = state.profile;
+  const initial = (p.ownerName || 'P').charAt(0).toUpperCase();
+  const fullName = `${p.carBrand} ${p.carModel}`.trim();
+
+  // Mode cards visibility
+  const viewCard = document.getElementById('profile-view-card');
+  const editCard = document.getElementById('profile-edit-card');
+
+  if (viewCard && editCard) {
+    if (state.profileEditMode) {
+      viewCard.classList.add('hidden');
+      editCard.classList.remove('hidden');
+    } else {
+      viewCard.classList.remove('hidden');
+      editCard.classList.add('hidden');
+    }
+  }
+
+  // Update View Card displays
+  const dispOwner = document.getElementById('profile-display-owner');
+  if (dispOwner) dispOwner.textContent = p.ownerName;
+
+  const dispBrand = document.getElementById('profile-display-brand');
+  if (dispBrand) dispBrand.textContent = p.carBrand;
+
+  const dispModel = document.getElementById('profile-display-model');
+  if (dispModel) dispModel.textContent = p.carModel;
+
+  const dispFull = document.getElementById('profile-display-fullname');
+  if (dispFull) dispFull.textContent = fullName;
+
+  const dispPlate = document.getElementById('profile-display-plate');
+  if (dispPlate) dispPlate.textContent = p.plateNumber;
+
+  const dispVin = document.getElementById('profile-display-vin');
+  if (dispVin) dispVin.textContent = p.vinNumber || 'SG9EV-2026-X8849';
+
+  const viewAvatar = document.getElementById('profile-view-avatar');
+  if (viewAvatar) viewAvatar.textContent = initial;
+
+  // Sync Input Fields if in Edit Mode
+  const inputName = document.getElementById('input-profile-name');
+  const inputBrand = document.getElementById('input-profile-brand');
+  const inputModel = document.getElementById('input-profile-model');
+  const inputPlate = document.getElementById('input-profile-plate');
+
+  if (state.profileEditMode) {
+    if (inputName && !inputName.value) inputName.value = p.ownerName;
+    if (inputBrand && !inputBrand.value) inputBrand.value = p.carBrand;
+    if (inputModel && !inputModel.value) inputModel.value = p.carModel;
+    if (inputPlate && !inputPlate.value) inputPlate.value = p.plateNumber;
+    updateLiveProfilePreview();
+  }
+}
+
+function handleSaveProfile() {
+  const inputName = document.getElementById('input-profile-name')?.value.trim();
+  const inputBrand = document.getElementById('input-profile-brand')?.value.trim();
+  const inputModel = document.getElementById('input-profile-model')?.value.trim();
+  const inputPlate = document.getElementById('input-profile-plate')?.value.trim();
+
+  if (!inputName) {
+    showVoiceToast('Please enter the owner full name.', true);
+    soundFx.playClick();
+    return;
+  }
+  if (!inputBrand) {
+    showVoiceToast('Please enter the vehicle brand.', true);
+    soundFx.playClick();
+    return;
+  }
+  if (!inputModel) {
+    showVoiceToast('Please enter the vehicle model.', true);
+    soundFx.playClick();
+    return;
+  }
+
+  const validation = validatePlateNumber(inputPlate);
+  if (!validation.isValid) {
+    showVoiceToast(validation.message, true);
+    soundFx.playClick();
+    return;
+  }
+
+  const cleanPlate = validation.formatted;
+
+  // Update State
+  state.profile.ownerName = inputName;
+  state.profile.carBrand = inputBrand;
+  state.profile.carModel = inputModel;
+  state.profile.plateNumber = cleanPlate;
+  state.profile.isConfigured = true;
+
+  // Synchronize Vehicle State
+  state.vehicle.plateNumber = cleanPlate;
+  state.vehicle.carModel = `${inputBrand} ${inputModel}`.trim();
+
+  // Persist
+  persistState();
+
+  // Sound and Voice feedback
+  soundFx.playLock();
+  playButtonVoiceAlert('profileSaved');
+
+  // Activity Log
+  addActivityLog(
+    'Profile & Registration Saved',
+    'controls',
+    'manual',
+    `${cleanPlate} (${state.vehicle.carModel}) registered to ${inputName}`
+  );
+
+  showVoiceToast(`Vehicle profile saved. License plate ${cleanPlate} active.`, false);
+
+  // Switch back to view mode
+  state.profileEditMode = false;
+  renderAll();
+}
+
 function renderAll() {
+  renderVehiclePlateAndBadges();
   renderCarVisualOverlays();
   renderDashboardQuickCards();
   renderActivities();
@@ -1782,6 +2072,7 @@ function renderAll() {
   renderDriverSafetyView();
   renderNotifications();
   renderSettingsView();
+  renderProfileView();
   updateAlertBadge();
   if (window.lucide) window.lucide.createIcons();
 }
@@ -1998,12 +2289,63 @@ document.addEventListener('DOMContentLoaded', () => {
     state.vehicle = { ...INITIAL_VEHICLE_STATE };
     state.settings = { ...INITIAL_SETTINGS };
     state.drowsinessMetrics = { ...NOMINAL_METRICS };
+    state.profile = { ...INITIAL_PROFILE_STATE };
     state.alerts = [];
     state.activities = [];
     persistState();
-    showVoiceToast('All demo states reset to factory baseline.', false);
+    showVoiceToast('All demo states and profile reset to factory baseline.', false);
     renderAll();
   });
+
+  // Profile View & Edit Actions
+  const enterProfileEdit = () => {
+    state.profileEditMode = true;
+    soundFx.playClick();
+    renderProfileView();
+    const inputName = document.getElementById('input-profile-name');
+    const inputBrand = document.getElementById('input-profile-brand');
+    const inputModel = document.getElementById('input-profile-model');
+    const inputPlate = document.getElementById('input-profile-plate');
+    if (inputName) inputName.value = state.profile.ownerName;
+    if (inputBrand) inputBrand.value = state.profile.carBrand;
+    if (inputModel) inputModel.value = state.profile.carModel;
+    if (inputPlate) inputPlate.value = state.profile.plateNumber;
+    updateLiveProfilePreview();
+    if (window.lucide) window.lucide.createIcons();
+  };
+
+  const exitProfileEdit = () => {
+    state.profileEditMode = false;
+    soundFx.playClick();
+    renderProfileView();
+    if (window.lucide) window.lucide.createIcons();
+  };
+
+  document.getElementById('btn-start-edit-profile')?.addEventListener('click', enterProfileEdit);
+  document.getElementById('btn-edit-profile-card')?.addEventListener('click', enterProfileEdit);
+  document.getElementById('btn-cancel-edit-profile')?.addEventListener('click', exitProfileEdit);
+  document.getElementById('btn-cancel-edit-x')?.addEventListener('click', exitProfileEdit);
+
+  // Live input events for real-time preview and validation
+  ['input-profile-name', 'input-profile-brand', 'input-profile-model', 'input-profile-plate'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', updateLiveProfilePreview);
+  });
+
+  // Quick brand selection pills
+  document.querySelectorAll('.brand-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const brand = chip.getAttribute('data-brand');
+      const inputBrand = document.getElementById('input-profile-brand');
+      if (inputBrand && brand) {
+        inputBrand.value = brand;
+        updateLiveProfilePreview();
+        soundFx.playClick();
+      }
+    });
+  });
+
+  // Save profile button
+  document.getElementById('btn-save-profile')?.addEventListener('click', handleSaveProfile);
 
   // Voice Assistant Modal Actions
   const voiceModal = document.getElementById('voice-assistant-modal');

@@ -40,7 +40,7 @@
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span>5G CAN-BUS LINKED</span>
               <span>·</span>
-              <span class="font-mono text-cyan-400">SG-2026-AI</span>
+              <span id="header-plate-badge" class="font-mono text-cyan-400">SG-2026-AI</span>
             </div>
           </div>
         </div>
@@ -64,6 +64,12 @@
           <button class="tab-btn relative p-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 text-slate-300 transition-all" data-tab="notifications" title="Notifications">
             <i data-lucide="bell" class="w-5 h-5"></i>
             <span class="unread-badge hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-[9px] font-mono font-bold flex items-center justify-center text-white ring-2 ring-[#05070D]"></span>
+          </button>
+
+          <!-- Owner Profile Header Button -->
+          <button class="tab-btn flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 text-slate-300 transition-all" data-tab="profile" title="Owner Profile & Vehicle Registration">
+            <div id="header-avatar-circle" class="w-6 h-6 rounded-full bg-cyan-500/20 border border-cyan-400/60 flex items-center justify-center text-[10px] text-cyan-300 font-bold font-mono">P</div>
+            <span id="header-owner-name" class="hidden lg:inline text-xs font-mono text-slate-200 font-semibold max-w-[120px] truncate">Piyush Sharma</span>
           </button>
         </div>
       </div>
@@ -100,6 +106,10 @@
             <i data-lucide="settings" class="w-4 h-4"></i>
             <span>SETTINGS</span>
           </button>
+          <button class="tab-btn px-3.5 py-1.5 rounded-lg border border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all" data-tab="profile">
+            <i data-lucide="user" class="w-4 h-4"></i>
+            <span>PROFILE</span>
+          </button>
         </div>
       </nav>
     </header>
@@ -119,8 +129,8 @@
           <div class="relative z-10 p-5 pb-2 flex flex-wrap items-center justify-between gap-4">
             <div>
               <div class="flex items-center gap-2">
-                <span class="text-xl font-extrabold text-white tracking-wider font-mono">SmartGuard EV-9 CyberSedan</span>
-                <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">SG-2026-AI</span>
+                <span id="dashboard-car-model" class="text-xl font-extrabold text-white tracking-wider font-mono">SmartGuard EV-9 CyberSedan</span>
+                <span id="dashboard-plate-badge" class="text-xs font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">SG-2026-AI</span>
               </div>
               <div class="flex items-center gap-3 text-xs text-slate-400 mt-1">
                 <span class="flex items-center gap-1.5">
@@ -149,9 +159,12 @@
           <div class="relative w-full aspect-21/9 md:aspect-24/10 min-h-[300px] max-h-[460px] flex items-center justify-center overflow-hidden select-none">
             <!-- Base Isometric Car Image -->
             <img
-              src="/assets/images/car_wireframe_cyber_1792818525279.jpg"
+              id="car-schematic-img"
+              src="/assets/images/car_wireframe_cyber_1792990132283.jpg"
               alt="Futuristic Smart Car Isometric Schematic"
-              class="w-full h-full object-cover object-center brightness-105"
+              class="w-full h-full object-cover object-center brightness-105 select-none"
+              referrerpolicy="no-referrer"
+              loading="eager"
             />
 
             <!-- 1. HEADLIGHTS DYNAMIC VISUAL GLOW & LASER BEAMS OVERLAY -->
@@ -251,6 +264,19 @@
                 <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-400"></i>
                 <span>Trunk/Dicky: <strong class="text-slate-400">CLOSED</strong></span>
               </button>
+            </div>
+
+            <!-- On-Vehicle Front Number Plate Mount -->
+            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-25 pointer-events-none select-none">
+              <div class="hsrp-plate flex items-center rounded-md px-3 py-1 font-mono shadow-2xl border border-slate-900/60">
+                <div class="bg-blue-700 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-l -ml-3 mr-2 flex flex-col items-center justify-center leading-tight">
+                  <span class="text-[6px] opacity-80">🇮🇳</span>
+                  <span>IND</span>
+                </div>
+                <div class="w-1.5 h-1.5 rounded-full border border-slate-400 bg-slate-300 mr-2 opacity-75"></div>
+                <span id="on-car-plate-number" class="text-slate-900 font-extrabold tracking-widest text-xs sm:text-sm">SG-2026-AI</span>
+                <div class="w-1.5 h-1.5 rounded-full border border-slate-400 bg-slate-300 ml-2 opacity-75"></div>
+              </div>
             </div>
           </div>
 
@@ -644,9 +670,10 @@
         <!-- Sentry Camera Feed Preview -->
         <div class="relative w-full aspect-16/9 max-h-[460px] rounded-2xl overflow-hidden border border-cyan-500/30 bg-black">
           <img
-            src="/assets/images/sentry_perimeter_camera_1792818526033.jpg"
+            src="/assets/images/sentry_perimeter_cam_1792990134081.jpg"
             alt="360 Sentry Perimeter Live Camera"
             class="w-full h-full object-cover brightness-95"
+            referrerpolicy="no-referrer"
           />
 
           <!-- HUD HUD Camera Overlay -->
@@ -726,9 +753,10 @@
           <!-- DMS Camera Preview -->
           <div class="lg:col-span-2 relative aspect-16/10 rounded-2xl overflow-hidden border border-emerald-500/30 bg-black">
             <img
-              src="/assets/images/driver_monitoring_feed_1792818526816.jpg"
+              src="/assets/images/driver_monitoring_feed_1792990133850.jpg"
               alt="Driver Monitoring Infrared Feed"
               class="w-full h-full object-cover"
+              referrerpolicy="no-referrer"
             />
             <div class="absolute inset-0 pointer-events-none p-4 flex flex-col justify-between">
               <div class="flex items-center justify-between text-xs font-mono">
@@ -902,6 +930,310 @@
             <button id="btn-reset-demo-state" class="px-4 py-2 rounded-xl bg-red-950 border border-red-800 text-red-200 text-xs font-mono font-bold hover:bg-red-900">
               RESET ALL
             </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 8. PROFILE VIEW ================= -->
+      <section id="view-profile" class="tab-content flex-col gap-6 hidden">
+        <!-- Profile View Header -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold font-mono text-white flex items-center gap-2">
+              <i data-lucide="user" class="w-5 h-5 text-cyan-400"></i>
+              <span>Vehicle Profile &amp; Owner Identity</span>
+            </h2>
+            <p class="text-xs text-slate-400">Manage registered owner credentials, vehicle manufacturer brand, model, and official license plate number.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-start-edit-profile" class="px-4 py-2 rounded-xl bg-cyan-500/20 border border-cyan-400 text-cyan-200 text-xs font-mono font-bold hover:bg-cyan-500/30 neon-glow-cyan flex items-center gap-2 transition-all">
+              <i data-lucide="edit-3" class="w-4 h-4 text-cyan-400"></i>
+              <span>EDIT PROFILE</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. VIEW PROFILE CARD (Default View Mode) -->
+        <div id="profile-view-card" class="flex flex-col gap-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left: Digital Ownership Badge -->
+            <div class="lg:col-span-2 cyber-panel p-6 rounded-2xl flex flex-col justify-between gap-6">
+              <div>
+                <!-- Owner Info Header -->
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
+                  <div class="flex items-center gap-3">
+                    <div id="profile-view-avatar" class="w-14 h-14 rounded-2xl bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center text-cyan-300 font-mono font-bold text-xl shadow-lg shadow-cyan-500/20 neon-glow-cyan">
+                      P
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <span id="profile-display-owner" class="text-lg font-bold text-white font-mono">Piyush Sharma</span>
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-mono font-bold flex items-center gap-1">
+                          <i data-lucide="check-circle-2" class="w-3 h-3"></i>
+                          <span>VERIFIED OWNER</span>
+                        </span>
+                      </div>
+                      <div class="text-xs text-slate-400 font-mono mt-0.5 flex items-center gap-2">
+                        <span>SmartGuard Digital Key Active</span>
+                        <span>·</span>
+                        <span class="text-cyan-400">Master Level Access</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Vehicle Brand & Model Designation -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                  <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                    <div class="text-[11px] font-mono text-slate-400 uppercase">Vehicle Brand / Manufacturer</div>
+                    <div id="profile-display-brand" class="text-base font-bold text-white font-mono mt-1">SmartGuard</div>
+                  </div>
+                  <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                    <div class="text-[11px] font-mono text-slate-400 uppercase">Vehicle Model &amp; Variant</div>
+                    <div id="profile-display-model" class="text-base font-bold text-cyan-300 font-mono mt-1">EV-9 CyberSedan</div>
+                  </div>
+                </div>
+
+                <!-- Official Vehicle Registration Plate (HSRP) Presentation -->
+                <div class="p-5 rounded-2xl bg-slate-950/80 border border-cyan-500/30 flex flex-col gap-3">
+                  <div class="flex items-center justify-between text-xs font-mono">
+                    <span class="text-slate-400 uppercase font-bold tracking-wider">Official Vehicle Registration Number</span>
+                    <span class="text-[10px] text-cyan-400 px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800">HSRP CERTIFIED</span>
+                  </div>
+
+                  <!-- Realistic Physical License Plate Element -->
+                  <div class="w-full max-w-md mx-auto py-3">
+                    <div class="hsrp-plate relative flex items-center justify-between rounded-lg px-4 py-2.5 font-mono shadow-2xl border-2 border-slate-800">
+                      <!-- Blue Country Band -->
+                      <div class="bg-blue-700 text-white px-2 py-2 rounded-l -ml-4 mr-3 flex flex-col items-center justify-center leading-tight shadow-md">
+                        <span class="text-[9px]">🇮🇳</span>
+                        <span class="text-[10px] font-extrabold tracking-tight mt-0.5">IND</span>
+                      </div>
+
+                      <!-- Screw Rivet Left -->
+                      <div class="w-2.5 h-2.5 rounded-full border border-slate-400 bg-slate-300 shadow-inner opacity-75"></div>
+
+                      <!-- Embossed Plate Text -->
+                      <div class="flex-1 text-center">
+                        <span id="profile-display-plate" class="text-slate-950 font-extrabold tracking-[0.25em] text-xl sm:text-2xl drop-shadow-sm">SG-2026-AI</span>
+                      </div>
+
+                      <!-- Screw Rivet Right -->
+                      <div class="w-2.5 h-2.5 rounded-full border border-slate-400 bg-slate-300 shadow-inner opacity-75"></div>
+
+                      <!-- Chromium Hologram Watermark -->
+                      <div class="hsrp-holo w-5 h-5 rounded-full border border-cyan-400/50 ml-3 flex items-center justify-center text-[8px] text-cyan-900 font-bold" title="Chromium Laser Hologram">
+                        ✦
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="text-[11px] font-mono text-slate-400 flex items-center gap-1.5 justify-center">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <span>Synchronized with Dashboard plate, Header status, and Live Car model.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Edit Trigger Button -->
+              <div class="pt-2">
+                <button id="btn-edit-profile-card" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all">
+                  <i data-lucide="edit-3" class="w-4 h-4 text-cyan-400"></i>
+                  <span>EDIT VEHICLE &amp; OWNER DETAILS</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Ownership Details & Security Specs -->
+            <div class="cyber-panel p-6 rounded-2xl flex flex-col justify-between gap-4">
+              <div>
+                <div class="text-xs font-mono text-slate-400 uppercase font-bold tracking-wider mb-4">Registration &amp; Telematics Details</div>
+                
+                <div class="flex flex-col gap-3 font-mono text-xs">
+                  <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between">
+                    <span class="text-slate-400">Full Designation:</span>
+                    <span id="profile-display-fullname" class="text-white font-bold text-right truncate max-w-[140px]">SmartGuard EV-9 CyberSedan</span>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between">
+                    <span class="text-slate-400">VIN Number:</span>
+                    <span id="profile-display-vin" class="text-cyan-300 font-bold">SG9EV-2026-X8849</span>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between">
+                    <span class="text-slate-400">Registration Date:</span>
+                    <span class="text-slate-300">2026-03-15</span>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between">
+                    <span class="text-slate-400">Linked Telematics:</span>
+                    <span class="text-emerald-400 font-bold">CAN-Bus v4.2 5G</span>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between">
+                    <span class="text-slate-400">Local Storage:</span>
+                    <span class="text-cyan-300">Synced (Active)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tip / Note -->
+              <div class="p-3 rounded-xl bg-slate-900 border border-slate-800/80 text-[11px] text-slate-400 flex items-start gap-2">
+                <i data-lucide="info" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                <span>Updating your vehicle registration immediately updates the number plate displayed on the dashboard car model.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. EDIT PROFILE CARD (Edit Form with Live Validation & Preview) -->
+        <div id="profile-edit-card" class="cyber-panel p-6 rounded-2xl flex flex-col gap-6 hidden">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <i data-lucide="edit-3" class="w-5 h-5 text-cyan-400"></i>
+              <h3 class="text-base font-bold font-mono text-white">Edit Owner &amp; Vehicle Registration Profile</h3>
+            </div>
+            <button id="btn-cancel-edit-x" class="text-slate-400 hover:text-white p-1">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Form Fields Column -->
+            <div class="flex flex-col gap-4">
+              <!-- Name Input -->
+              <div>
+                <label class="block text-xs font-mono text-slate-300 font-bold mb-1.5">
+                  OWNER FULL NAME <span class="text-cyan-400">*</span>
+                </label>
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="input-profile-name"
+                    placeholder="e.g. Piyush Sharma"
+                    class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs font-mono text-white outline-none transition-all"
+                  />
+                </div>
+                <p class="text-[10px] text-slate-500 font-mono mt-1">Displays on the dashboard greeting and owner avatar.</p>
+              </div>
+
+              <!-- Brand Input + Quick Chips -->
+              <div>
+                <label class="block text-xs font-mono text-slate-300 font-bold mb-1.5">
+                  CAR BRAND / MANUFACTURER <span class="text-cyan-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="input-profile-brand"
+                  placeholder="e.g. SmartGuard, Tesla, Audi, Tata..."
+                  class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs font-mono text-white outline-none transition-all"
+                />
+                <!-- Quick Brand Selector Chips -->
+                <div class="flex flex-wrap gap-1.5 mt-2">
+                  <span class="text-[10px] font-mono text-slate-400 self-center mr-1">Quick pick:</span>
+                  <button type="button" class="brand-chip px-2 py-0.5 rounded bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-[10px] font-mono text-slate-300" data-brand="SmartGuard">SmartGuard</button>
+                  <button type="button" class="brand-chip px-2 py-0.5 rounded bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-[10px] font-mono text-slate-300" data-brand="Tesla">Tesla</button>
+                  <button type="button" class="brand-chip px-2 py-0.5 rounded bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-[10px] font-mono text-slate-300" data-brand="Tata">Tata</button>
+                  <button type="button" class="brand-chip px-2 py-0.5 rounded bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-[10px] font-mono text-slate-300" data-brand="Audi">Audi</button>
+                  <button type="button" class="brand-chip px-2 py-0.5 rounded bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-[10px] font-mono text-slate-300" data-brand="BMW">BMW</button>
+                  <button type="button" class="brand-chip px-2 py-0.5 rounded bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-[10px] font-mono text-slate-300" data-brand="Hyundai">Hyundai</button>
+                </div>
+              </div>
+
+              <!-- Model Input -->
+              <div>
+                <label class="block text-xs font-mono text-slate-300 font-bold mb-1.5">
+                  CAR MODEL &amp; VARIANT <span class="text-cyan-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="input-profile-model"
+                  placeholder="e.g. EV-9 CyberSedan, Model S, Nexon EV Max..."
+                  class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs font-mono text-white outline-none transition-all"
+                />
+              </div>
+
+              <!-- Registration Number (Plate) Input with live validation -->
+              <div>
+                <label class="block text-xs font-mono text-slate-300 font-bold mb-1.5">
+                  VEHICLE REGISTRATION NUMBER (LICENSE PLATE) <span class="text-cyan-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="input-profile-plate"
+                  maxlength="16"
+                  placeholder="e.g. SG-2026-AI or DL 01 AB 1234"
+                  class="w-full uppercase bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs font-mono text-cyan-300 font-bold tracking-widest outline-none transition-all"
+                />
+
+                <!-- Real-time Live Validation Status Banner -->
+                <div id="plate-validation-msg" class="mt-2 p-2.5 rounded-xl border text-xs font-mono flex items-center gap-2 transition-all">
+                  <!-- Injected dynamically: checkmark or warning -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Real-Time Live Preview Column -->
+            <div class="flex flex-col justify-between p-5 rounded-2xl bg-slate-950/90 border border-cyan-500/30 gap-4">
+              <div>
+                <div class="flex items-center justify-between text-xs font-mono mb-3">
+                  <span class="text-slate-400 uppercase font-bold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                    <span>Live Preview Before Saving</span>
+                  </span>
+                  <span class="text-[10px] text-cyan-400 font-mono">REAL-TIME SYNC</span>
+                </div>
+
+                <!-- Preview License Plate (HSRP) -->
+                <div class="py-2">
+                  <div class="text-[11px] font-mono text-slate-400 mb-1.5">Number Plate Preview:</div>
+                  <div class="hsrp-plate relative flex items-center justify-between rounded-lg px-4 py-2 font-mono shadow-2xl border-2 border-slate-800">
+                    <div class="bg-blue-700 text-white px-2 py-1 rounded-l -ml-4 mr-2 flex flex-col items-center justify-center leading-tight">
+                      <span class="text-[8px]">🇮🇳</span>
+                      <span class="text-[9px] font-extrabold tracking-tight">IND</span>
+                    </div>
+                    <div class="w-2 h-2 rounded-full border border-slate-400 bg-slate-300 opacity-75"></div>
+                    <span id="preview-plate-number" class="text-slate-950 font-extrabold tracking-[0.25em] text-lg sm:text-xl">SG-2026-AI</span>
+                    <div class="w-2 h-2 rounded-full border border-slate-400 bg-slate-300 opacity-75"></div>
+                  </div>
+                </div>
+
+                <!-- Preview Vehicle Badge in Dashboard -->
+                <div class="mt-4 p-3 rounded-xl bg-slate-900 border border-slate-800 flex flex-col gap-1.5">
+                  <div class="text-[11px] font-mono text-slate-400">Dashboard HUD Mockup:</div>
+                  <div class="flex items-center gap-2">
+                    <span id="preview-car-fullname" class="text-sm font-extrabold text-white font-mono truncate">SmartGuard EV-9 CyberSedan</span>
+                    <span id="preview-plate-badge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-950 border border-slate-700 text-slate-300">SG-2026-AI</span>
+                  </div>
+                </div>
+
+                <!-- Preview Owner Greeting -->
+                <div class="mt-3 p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-3">
+                  <div id="preview-avatar" class="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 font-mono font-bold text-xs flex items-center justify-center">
+                    P
+                  </div>
+                  <div>
+                    <div class="text-[10px] font-mono text-slate-400">Owner Identity:</div>
+                    <div id="preview-owner-name" class="text-xs font-bold text-slate-200 font-mono">Piyush Sharma</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Submit / Cancel Buttons -->
+              <div class="flex items-center gap-3 pt-3 border-t border-slate-800/80">
+                <button
+                  type="button"
+                  id="btn-save-profile"
+                  class="flex-1 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-mono font-bold text-xs flex items-center justify-center gap-2 neon-glow-cyan shadow-lg shadow-cyan-500/30 transition-all"
+                >
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                  <span>SAVE &amp; APPLY PROFILE</span>
+                </button>
+                <button
+                  type="button"
+                  id="btn-cancel-edit-profile"
+                  class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-mono text-xs transition-all"
+                >
+                  CANCEL
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
